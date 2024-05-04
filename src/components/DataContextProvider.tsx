@@ -1,85 +1,85 @@
 import { createContext, useState } from "react";
 import * as React from "react";
+import { solveSudoku } from "../functions/solveSudoku";
 
-const initialBlockState = {
-  block1: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
-  block2: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
-  block3: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
-  block4: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
-  block5: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
-  block6: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
-  block7: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
-  block8: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
-  block9: {
-    row1: [null, null, null],
-    row2: [null, null, null],
-    row3: [null, null, null],
-  },
+const initialBlockState: IBlocks = {
+  block1: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block2: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block3: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block4: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block5: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block6: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block7: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block8: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block9: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
 } as IBlocks;
 
+export type blockIdsType = keyof IBlocks;
+
 export type selectedSquareType = {
-  block: keyof IBlocks | null;
+  block: blockIdsType | null;
   row: number | null;
   col: number | null;
 };
 
-export interface IRows {
-  row1: [number | null, number | null, number | null];
-  row2: [number | null, number | null, number | null];
-  row3: [number | null, number | null, number | null];
-}
+export type rowType = [number | null, number | null, number | null];
+
+export type blockType = [rowType, rowType, rowType];
 
 export interface IBlocks {
-  block1: IRows;
-  block2: IRows;
-  block3: IRows;
-  block4: IRows;
-  block5: IRows;
-  block6: IRows;
-  block7: IRows;
-  block8: IRows;
-  block9: IRows;
+  block1: blockType;
+  block2: blockType;
+  block3: blockType;
+  block4: blockType;
+  block5: blockType;
+  block6: blockType;
+  block7: blockType;
+  block8: blockType;
+  block9: blockType;
 }
-
-export type blockIdsType = keyof IBlocks;
 
 export type DataContextType = {
   blocks: IBlocks;
   selectedSquare: selectedSquareType;
   setBlocks: React.Dispatch<React.SetStateAction<IBlocks>>;
   setSelectedSquare: React.Dispatch<React.SetStateAction<selectedSquareType>>;
+  triggerSolve: () => void;
 };
 
 export const DataContext = createContext<DataContextType>({
@@ -91,6 +91,7 @@ export const DataContext = createContext<DataContextType>({
   },
   setBlocks: () => {},
   setSelectedSquare: () => {},
+  triggerSolve: () => {},
 });
 
 export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -103,9 +104,23 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
     col: null,
   });
 
+  const triggerSolve = () => {
+    // const newValues = solveSudoku(blocks) as IBlocks;
+    const newValues = solveSudoku(blocks);
+
+    console.log(newValues);
+    return setBlocks(newValues);
+  };
+
   return (
     <DataContext.Provider
-      value={{ blocks, setBlocks, selectedSquare, setSelectedSquare }}
+      value={{
+        triggerSolve,
+        blocks,
+        setBlocks,
+        selectedSquare,
+        setSelectedSquare,
+      }}
     >
       {children}
     </DataContext.Provider>

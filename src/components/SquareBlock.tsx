@@ -6,7 +6,7 @@ const validNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const Square: React.FC<{
   children: React.ReactNode;
   blockId: blockIdsType;
-  row: 1 | 2 | 3;
+  row: 0 | 1 | 2;
   col: number;
 }> = ({ children, row, col, blockId }) => {
   const { setBlocks, selectedSquare, setSelectedSquare } =
@@ -36,7 +36,7 @@ const Square: React.FC<{
       if (e.key === "Backspace") {
         setBlocks((prevBlocks: IBlocks) => {
           const newBlocks = prevBlocks;
-          newBlocks[blockId][`row${row}`][col - 1] = null;
+          newBlocks[blockId][row][col] = null;
           return newBlocks;
         });
       } else if (!validNumbers.includes(e.key)) {
@@ -44,7 +44,7 @@ const Square: React.FC<{
       } else {
         setBlocks((prevBlocks) => {
           const newBlocks = { ...prevBlocks };
-          newBlocks[blockId][`row${row}`][col - 1] = parseInt(e.key);
+          newBlocks[blockId][row][col] = parseInt(e.key);
           return newBlocks;
         });
       }
@@ -78,13 +78,13 @@ const SquareBlock: React.FC<{ blockId: blockIdsType }> = ({ blockId }) => {
 
   return (
     <div className="grid grid-cols-[repeat(3,_50px)] grid-rows-[repeat(3,_50px)]">
-      {Object.values(blocks[blockId]).map((row, rowIndex) => {
-        return row.map((col: number, colIndex: number) => {
+      {blocks[blockId].map((row, rowIndex) => {
+        return row.map((col: number | null, colIndex: number) => {
           return (
             <Square
               blockId={blockId}
-              row={(rowIndex + 1) as 1 | 2 | 3}
-              col={colIndex + 1}
+              row={rowIndex as 0 | 1 | 2}
+              col={colIndex as 0 | 1 | 2}
               key={`${blockId}-${rowIndex}-${colIndex}`}
             >
               {col}

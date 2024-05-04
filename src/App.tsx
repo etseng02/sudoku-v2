@@ -1,5 +1,6 @@
 import { DataContextProvider } from "./components/DataContextProvider";
 import MainGrid from "./components/MainGrid";
+import SolveButton from "./components/SolveButton";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
         <main>
           <div className="max-w-[600px]">
             <MainGrid />
+            <SolveButton />
           </div>
         </main>
       </DataContextProvider>
