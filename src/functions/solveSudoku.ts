@@ -1,25 +1,29 @@
+import React from "react";
+
 import {
   IBlocks,
   blockType,
   blockIdsType,
   rowType,
+  selectedSquareType,
 } from "../components/DataContextProvider";
 
 const allNumbersSet = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
-const columns: Record<blockIdsType, [blockIdsType, blockIdsType]> = {
-  block1: ["block4", "block7"],
-  block2: ["block5", "block8"],
-  block3: ["block6", "block9"],
-  block4: ["block1", "block7"],
-  block5: ["block2", "block8"],
-  block6: ["block3", "block9"],
-  block7: ["block1", "block4"],
-  block8: ["block2", "block5"],
-  block9: ["block3", "block6"],
-};
+const relatedColumnBlocks: Record<blockIdsType, [blockIdsType, blockIdsType]> =
+  {
+    block1: ["block4", "block7"],
+    block2: ["block5", "block8"],
+    block3: ["block6", "block9"],
+    block4: ["block1", "block7"],
+    block5: ["block2", "block8"],
+    block6: ["block3", "block9"],
+    block7: ["block1", "block4"],
+    block8: ["block2", "block5"],
+    block9: ["block3", "block6"],
+  };
 
-const rows: Record<blockIdsType, [blockIdsType, blockIdsType]> = {
+const relatedRowBlocks: Record<blockIdsType, [blockIdsType, blockIdsType]> = {
   block1: ["block2", "block3"],
   block2: ["block1", "block3"],
   block3: ["block1", "block2"],
@@ -50,7 +54,10 @@ export const eliminateNumbersWithinColumn = (
   row: number,
   col: number
 ): number[] => {
-  const otherBlocksToCheck = columns[blockId] as [blockIdsType, blockIdsType];
+  const otherBlocksToCheck = relatedColumnBlocks[blockId] as [
+    blockIdsType,
+    blockIdsType
+  ];
 
   const columnValues = new Set() as Set<number>;
 
@@ -76,7 +83,10 @@ export const eliminateNumbersWithinRow = (
   row: number,
   col: number
 ): number[] => {
-  const otherBlocksToCheck = rows[blockId] as [blockIdsType, blockIdsType];
+  const otherBlocksToCheck = relatedRowBlocks[blockId] as [
+    blockIdsType,
+    blockIdsType
+  ];
 
   const rowValues = new Set() as Set<number>;
 
@@ -136,30 +146,59 @@ const solveNextNumber = (
   }
 };
 
-export const solveSudoku = (blocks: IBlocks) => {
+export const solveSudoku = (
+  blocks: IBlocks,
+  setBlocks: React.Dispatch<React.SetStateAction<IBlocks>>,
+  setSelectedSquare: React.Dispatch<React.SetStateAction<selectedSquareType>>,
+  callBack: () => void
+) => {
+  let numberHasChanged = false;
   const newBlockValues = Object.entries(blocks).reduce((acc, block) => {
     const blockId = block[0] as blockIdsType;
     const blockValues = block[1] as blockType;
 
-    const newBlock = blockValues.map((rowValues: rowType, rowIndex) => {
-      const newRowValues = rowValues.map(
-        (colValues: number | null, colIndex: number) => {
-          if (colValues === null) {
-            const result = solveNextNumber(blocks, blockId, rowIndex, colIndex);
-            return result;
-          } else {
-            return colValues;
-          }
-        }
-      ) as rowType;
+    if (numberHasChanged) acc[blockId] = blockValues;
 
-      return newRowValues;
-    }) as blockType;
+    const newBlock = !numberHasChanged
+      ? (blockValues.map((rowValues: rowType, rowIndex) => {
+          const newRowValues = rowValues.map(
+            (colValues: number | null, colIndex: number) => {
+              if (colValues === null && !numberHasChanged) {
+                const result = solveNextNumber(
+                  blocks,
+                  blockId,
+                  rowIndex,
+                  colIndex
+                );
+                if (result) {
+                  numberHasChanged = true;
+                  setSelectedSquare((prevState) => ({
+                    ...prevState,
+                    block: blockId as blockIdsType,
+                    row: rowIndex,
+                    col: colIndex,
+                  }));
+                }
+
+                return result;
+              } else {
+                return colValues;
+              }
+            }
+          ) as rowType;
+
+          return newRowValues;
+        }) as blockType)
+      : blockValues;
 
     acc[blockId] = newBlock;
 
     return acc;
   }, {} as IBlocks);
 
-  return newBlockValues;
+  setBlocks(newBlockValues);
+
+  if (!numberHasChanged) {
+    callBack();
+  }
 };

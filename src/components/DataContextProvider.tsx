@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import * as React from "react";
 import { solveSudoku } from "../functions/solveSudoku";
 
@@ -146,16 +146,38 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [blocks, setBlocks] = useState<IBlocks>(initialBlockState);
+  const [isSolving, setIsSolvingBlocks] = useState<boolean>(false);
   const [selectedSquare, setSelectedSquare] = useState<selectedSquareType>({
     block: null,
     row: null,
     col: null,
   });
 
-  const triggerSolve = () => {
-    const newValues = solveSudoku(blocks);
+  const stopSolving = (timer: number) => {
+    setIsSolvingBlocks(false);
+    clearTimeout(timer);
+  };
 
-    return setBlocks(newValues);
+  useEffect(() => {
+    if (isSolving) {
+      const timer: ReturnType<typeof setTimeout> = setTimeout(() => {
+        solveSudoku(blocks, setBlocks, setSelectedSquare, () =>
+          stopSolving(timer)
+        );
+      }, 1000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isSolving, blocks, setBlocks]);
+
+  const triggerSolve = () => {
+    if (isSolving) {
+      setIsSolvingBlocks(false);
+    } else {
+      setIsSolvingBlocks(true);
+    }
   };
 
   return (
