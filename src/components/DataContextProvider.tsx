@@ -108,7 +108,6 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
     // const newValues = solveSudoku(blocks) as IBlocks;
     const newValues = solveSudoku(blocks);
 
-    console.log(newValues);
     return setBlocks(newValues);
   };
 
