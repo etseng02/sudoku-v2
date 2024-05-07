@@ -1,7 +1,10 @@
-import { configDefaults, defineConfig } from "vitest/config";
+/// <reference types="vitest" />
+
+import { defineConfig } from "vite";
 
 export default defineConfig({
   test: {
-    exclude: [...configDefaults.exclude, "packages/template/*"],
+    environment: "jsdom",
+    setupFiles: ["./vitest-setup.ts"],
   },
 });

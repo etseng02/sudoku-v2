@@ -130,8 +130,6 @@ describe("eliminateNumberWithinRow", () => {
       1
     );
 
-    console.log(result);
-
     expect(result).toEqual(expect.arrayContaining([1, 2, 3, 4, 7, 8, 9]));
   });
 

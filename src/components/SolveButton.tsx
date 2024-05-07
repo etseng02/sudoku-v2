@@ -6,10 +6,11 @@ const SolveButton = () => {
 
   return (
     <button
+      data-testid="solve-button"
       className="rounded-full bg-red-600 p-6"
       onClick={() => triggerSolve()}
     >
-      Solve Sudoku
+      Solve
     </button>
   );
 };
