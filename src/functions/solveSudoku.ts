@@ -34,57 +34,22 @@ const rows: Record<blockIdsType, [blockIdsType, blockIdsType]> = {
 const showMissingNumbers = (currentSet: Set<number>) =>
   [...allNumbersSet].filter((num) => !currentSet.has(num));
 
-export const solveWithinBlock = (block: blockType): blockType => {
+export const eliminateNumbersWithinBlock = (block: blockType): number[] => {
   const flatBlock = block.flat();
 
   const currentSet = new Set(
     flatBlock.filter((value) => value !== null)
   ) as Set<number>;
 
-  if (allNumbersSet.size === currentSet.size) {
-    return block;
-    // block is already solved
-  } else if (currentSet.size === 8) {
-    const missingNumber = showMissingNumbers(currentSet)[0];
-
-    const missingIndex = flatBlock.indexOf(null);
-
-    const newBlockValues = flatBlock.toSpliced(missingIndex, 1, missingNumber);
-
-    const newBlock = [
-      [...newBlockValues.slice(0, 3)],
-      [...newBlockValues.slice(3, 6)],
-      [...newBlockValues.slice(6, 9)],
-    ] as blockType;
-
-    return newBlock;
-  } else {
-    return block;
-  }
+  return [...currentSet];
 };
 
-export const checkWithinBlock = (block: blockType): number | null => {
-  const flatBlock = block.flat();
-
-  const currentSet = new Set(
-    flatBlock.filter((value) => value !== null)
-  ) as Set<number>;
-
-  if (currentSet.size === 8) {
-    const missingNumber = showMissingNumbers(currentSet)[0];
-
-    return missingNumber;
-  } else {
-    return null;
-  }
-};
-
-export const checkColumn = (
+export const eliminateNumbersWithinColumn = (
   blocks: IBlocks,
   blockId: blockIdsType,
   row: number,
   col: number
-): number | null => {
+): number[] => {
   const otherBlocksToCheck = columns[blockId] as [blockIdsType, blockIdsType];
 
   const columnValues = new Set() as Set<number>;
@@ -97,26 +62,20 @@ export const checkColumn = (
   });
 
   blocks[blockId].forEach((rowValues, rowIndex) => {
-    if (rowIndex !== row) {
+    if (rowIndex !== row && rowValues[col]) {
       columnValues.add(rowValues[col] as number);
     }
   });
 
-  const missingNumbers = showMissingNumbers(columnValues);
-
-  if (missingNumbers.length === 1) {
-    return missingNumbers[0];
-  } else {
-    return null;
-  }
+  return [...columnValues];
 };
 
-export const checkRow = (
+export const eliminateNumbersWithinRow = (
   blocks: IBlocks,
   blockId: blockIdsType,
   row: number,
   col: number
-): number | null => {
+): number[] => {
   const otherBlocksToCheck = rows[blockId] as [blockIdsType, blockIdsType];
 
   const rowValues = new Set() as Set<number>;
@@ -129,18 +88,12 @@ export const checkRow = (
   });
 
   blocks[blockId][row].forEach((colValues, colIndex) => {
-    if (colIndex !== col) {
+    if (colIndex !== col && colValues) {
       rowValues.add(colValues as number);
     }
   });
 
-  const missingNumbers = showMissingNumbers(rowValues);
-
-  if (missingNumbers.length === 1) {
-    return missingNumbers[0];
-  } else {
-    return null;
-  }
+  return [...rowValues];
 };
 
 const solveNextNumber = (
@@ -149,13 +102,38 @@ const solveNextNumber = (
   row: number,
   col: number
 ): number | null => {
-  const nextNumber =
-    checkColumn(blocks, blockId, row, col) ??
-    checkRow(blocks, blockId, row, col) ??
-    checkWithinBlock(blocks[blockId]) ??
-    null;
+  const eliminatedNumbersWithinBlock = eliminateNumbersWithinBlock(
+    blocks[blockId]
+  );
 
-  return nextNumber;
+  const eliminatedNumbersWithinColumn = eliminateNumbersWithinColumn(
+    blocks,
+    blockId,
+    row,
+    col
+  );
+  const eliminatedNumbersWithinRow = eliminateNumbersWithinRow(
+    blocks,
+    blockId,
+    row,
+    col
+  );
+
+  const allEliminatedNumbers = [
+    ...eliminatedNumbersWithinBlock,
+    ...eliminatedNumbersWithinColumn,
+    ...eliminatedNumbersWithinRow,
+  ];
+
+  const eliminatedNumbersSet = new Set(allEliminatedNumbers);
+
+  const missingNumbers = showMissingNumbers(eliminatedNumbersSet);
+
+  if (missingNumbers.length === 1) {
+    return missingNumbers[0];
+  } else {
+    return null;
+  }
 };
 
 export const solveSudoku = (blocks: IBlocks) => {
@@ -168,7 +146,6 @@ export const solveSudoku = (blocks: IBlocks) => {
         (colValues: number | null, colIndex: number) => {
           if (colValues === null) {
             const result = solveNextNumber(blocks, blockId, rowIndex, colIndex);
-            console.log("solveNextNumber", result, blockId, rowIndex, colIndex);
             return result;
           } else {
             return colValues;

@@ -48,7 +48,55 @@ const initialBlockState: IBlocks = {
     [null, null, null],
     [null, null, null],
   ],
-} as IBlocks;
+};
+
+// const initialBlockState: IBlocks = {
+//   block1: [
+//     [8, null, 1],
+//     [2, 5, null],
+//     [null, 4, null],
+//   ],
+//   block2: [
+//     [null, null, null],
+//     [null, 7, null],
+//     [null, null, 8],
+//   ],
+//   block3: [
+//     [null, null, null],
+//     [null, 9, null],
+//     [null, 2, 6],
+//   ],
+//   block4: [
+//     [null, null, 7],
+//     [null, null, 5],
+//     [null, null, 3],
+//   ],
+//   block5: [
+//     [8, null, 5],
+//     [null, 4, 3],
+//     [7, 9, null],
+//   ],
+//   block6: [
+//     [null, 1, 3],
+//     [null, null, 7],
+//     [null, null, 4],
+//   ],
+//   block7: [
+//     [null, 9, null],
+//     [1, null, null],
+//     [null, 6, 4],
+//   ],
+//   block8: [
+//     [4, null, 7],
+//     [5, 8, 6],
+//     [null, 1, 2],
+//   ],
+//   block9: [
+//     [null, 6, 2],
+//     [null, 7, 9],
+//     [null, null, null],
+//   ],
+// };
 
 export type blockIdsType = keyof IBlocks;
 
@@ -105,7 +153,6 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
   });
 
   const triggerSolve = () => {
-    // const newValues = solveSudoku(blocks) as IBlocks;
     const newValues = solveSudoku(blocks);
 
     return setBlocks(newValues);
