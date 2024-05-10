@@ -161,31 +161,31 @@ export const solveSudoku = (
 
     const newBlock = !numberHasChanged
       ? (blockValues.map((rowValues: rowType, rowIndex) => {
-          const newRowValues = rowValues.map(
-            (colValues: number | null, colIndex: number) => {
-              if (colValues === null && !numberHasChanged) {
-                const result = solveNextNumber(
-                  blocks,
-                  blockId,
-                  rowIndex,
-                  colIndex
-                );
-                if (result) {
-                  numberHasChanged = true;
-                  setSelectedSquare((prevState) => ({
-                    ...prevState,
-                    block: blockId as blockIdsType,
-                    row: rowIndex,
-                    col: colIndex,
-                  }));
-                }
+          const newRowValues = rowValues.includes(null)
+            ? (rowValues.map((colValues: number | null, colIndex: number) => {
+                if (colValues === null && !numberHasChanged) {
+                  const result = solveNextNumber(
+                    blocks,
+                    blockId,
+                    rowIndex,
+                    colIndex
+                  );
+                  if (result) {
+                    numberHasChanged = true;
+                    setSelectedSquare((prevState) => ({
+                      ...prevState,
+                      block: blockId as blockIdsType,
+                      row: rowIndex,
+                      col: colIndex,
+                    }));
+                  }
 
-                return result;
-              } else {
-                return colValues;
-              }
-            }
-          ) as rowType;
+                  return result;
+                } else {
+                  return colValues;
+                }
+              }) as rowType)
+            : rowValues;
 
           return newRowValues;
         }) as blockType)

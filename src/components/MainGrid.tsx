@@ -8,7 +8,7 @@ const MainGrid = () => {
   const { blocks } = data;
 
   return (
-    <div className="grid grid-cols-[repeat(3,_200px)] grid-rows-[repeat(3,_200px)] ">
+    <div className="grid grid-cols-[repeat(3,_124px)] grid-rows-[repeat(3,_124px)] sm:grid-cols-[repeat(3,_154px)] sm:grid-rows-[repeat(3,_154px)] ">
       {Object.keys(blocks).map((_, index) => {
         return (
           <SquareBlock

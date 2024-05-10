@@ -9,7 +9,7 @@ const Square: React.FC<{
   row: 0 | 1 | 2;
   col: number;
 }> = ({ children, row, col, blockId }) => {
-  const { setBlocks, selectedSquare, setSelectedSquare } =
+  const { setBlocks, selectedSquare, setSelectedSquare, isSolving } =
     useContext(DataContext);
 
   const isSquareSelected =
@@ -35,7 +35,7 @@ const Square: React.FC<{
     (e: { key: string }) => {
       if (e.key === "Backspace") {
         setBlocks((prevBlocks: IBlocks) => {
-          const newBlocks = prevBlocks;
+          const newBlocks = { ...prevBlocks };
           newBlocks[blockId][row][col] = null;
           return newBlocks;
         });
@@ -53,20 +53,22 @@ const Square: React.FC<{
   );
 
   useEffect(() => {
-    if (isSquareSelected) {
+    if (isSquareSelected && !isSolving) {
       document.addEventListener("keydown", handleKeyDown, true);
     }
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, [isSquareSelected, handleKeyDown]);
+  }, [isSquareSelected, handleKeyDown, isSolving]);
 
   return (
     <div
-      className={`border-solid border-black text-center border-2 ${
-        isSquareSelected ? "bg-red-700" : "bg-white"
-      }`}
-      onClick={() => handleClick()}
+      className={`border-solid border-black flex justify-center items-center border-2 ${
+        isSquareSelected
+          ? "bg-red-700 text-gray-50"
+          : "bg-slate-100 text-gray-700"
+      } ${isSolving ? "cursor-not-allowed" : "cursor-pointer"}`}
+      onClick={() => (!isSolving ? handleClick() : () => {})}
     >
       {children}
     </div>
@@ -77,7 +79,7 @@ const SquareBlock: React.FC<{ blockId: blockIdsType }> = ({ blockId }) => {
   const { blocks } = useContext(DataContext);
 
   return (
-    <div className="grid grid-cols-[repeat(3,_50px)] grid-rows-[repeat(3,_50px)]">
+    <div className="grid grid-cols-[repeat(3,_40px)] grid-rows-[repeat(3,_40px)] sm:grid-cols-[repeat(3,_50px)] sm:grid-rows-[repeat(3,_50px)] border-solid border-black border-2">
       {blocks[blockId].map((row, rowIndex) => {
         return row.map((col: number | null, colIndex: number) => {
           return (

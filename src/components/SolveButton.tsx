@@ -2,15 +2,17 @@ import { useContext } from "react";
 import { DataContext } from "./DataContextProvider";
 
 const SolveButton = () => {
-  const { triggerSolve } = useContext(DataContext);
+  const { triggerSolve, isSolving } = useContext(DataContext);
 
   return (
     <button
       data-testid="solve-button"
-      className="rounded-full bg-red-600 p-6"
+      className={`rounded-full relative py-4 px-6 shadow-2xl text-white ${
+        isSolving ? "bg-red-600" : "bg-green-600"
+      }`}
       onClick={() => triggerSolve()}
     >
-      Solve
+      {isSolving ? "Solving..." : "Solve"}
     </button>
   );
 };

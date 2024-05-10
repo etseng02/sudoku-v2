@@ -2,101 +2,101 @@ import { createContext, useState, useEffect } from "react";
 import * as React from "react";
 import { solveSudoku } from "../functions/solveSudoku";
 
-const initialBlockState: IBlocks = {
-  block1: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-  block2: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-  block3: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-  block4: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-  block5: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-  block6: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-  block7: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-  block8: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-  block9: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
-};
-
 // const initialBlockState: IBlocks = {
 //   block1: [
-//     [8, null, 1],
-//     [2, 5, null],
-//     [null, 4, null],
+//     [null, null, null],
+//     [null, null, null],
+//     [null, null, null],
 //   ],
 //   block2: [
 //     [null, null, null],
-//     [null, 7, null],
-//     [null, null, 8],
+//     [null, null, null],
+//     [null, null, null],
 //   ],
 //   block3: [
 //     [null, null, null],
-//     [null, 9, null],
-//     [null, 2, 6],
+//     [null, null, null],
+//     [null, null, null],
 //   ],
 //   block4: [
-//     [null, null, 7],
-//     [null, null, 5],
-//     [null, null, 3],
+//     [null, null, null],
+//     [null, null, null],
+//     [null, null, null],
 //   ],
 //   block5: [
-//     [8, null, 5],
-//     [null, 4, 3],
-//     [7, 9, null],
+//     [null, null, null],
+//     [null, null, null],
+//     [null, null, null],
 //   ],
 //   block6: [
-//     [null, 1, 3],
-//     [null, null, 7],
-//     [null, null, 4],
+//     [null, null, null],
+//     [null, null, null],
+//     [null, null, null],
 //   ],
 //   block7: [
-//     [null, 9, null],
-//     [1, null, null],
-//     [null, 6, 4],
+//     [null, null, null],
+//     [null, null, null],
+//     [null, null, null],
 //   ],
 //   block8: [
-//     [4, null, 7],
-//     [5, 8, 6],
-//     [null, 1, 2],
+//     [null, null, null],
+//     [null, null, null],
+//     [null, null, null],
 //   ],
 //   block9: [
-//     [null, 6, 2],
-//     [null, 7, 9],
+//     [null, null, null],
+//     [null, null, null],
 //     [null, null, null],
 //   ],
 // };
+
+const initialBlockState: IBlocks = {
+  block1: [
+    [8, null, 1],
+    [2, 5, null],
+    [null, 4, null],
+  ],
+  block2: [
+    [null, null, null],
+    [null, 7, null],
+    [null, null, 8],
+  ],
+  block3: [
+    [null, null, null],
+    [null, 9, null],
+    [null, 2, 6],
+  ],
+  block4: [
+    [null, null, 7],
+    [null, null, 5],
+    [null, null, 3],
+  ],
+  block5: [
+    [8, null, 5],
+    [null, 4, 3],
+    [7, 9, null],
+  ],
+  block6: [
+    [null, 1, 3],
+    [null, null, 7],
+    [null, null, 4],
+  ],
+  block7: [
+    [null, 9, null],
+    [1, null, null],
+    [null, 6, 4],
+  ],
+  block8: [
+    [4, null, 7],
+    [5, 8, 6],
+    [null, 1, 2],
+  ],
+  block9: [
+    [null, 6, 2],
+    [null, 7, 9],
+    [null, null, null],
+  ],
+};
 
 export type blockIdsType = keyof IBlocks;
 
@@ -128,6 +128,7 @@ export type DataContextType = {
   setBlocks: React.Dispatch<React.SetStateAction<IBlocks>>;
   setSelectedSquare: React.Dispatch<React.SetStateAction<selectedSquareType>>;
   triggerSolve: () => void;
+  isSolving: boolean;
 };
 
 export const DataContext = createContext<DataContextType>({
@@ -140,6 +141,7 @@ export const DataContext = createContext<DataContextType>({
   setBlocks: () => {},
   setSelectedSquare: () => {},
   triggerSolve: () => {},
+  isSolving: false,
 });
 
 export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -161,10 +163,11 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (isSolving) {
       const timer: ReturnType<typeof setTimeout> = setTimeout(() => {
-        solveSudoku(blocks, setBlocks, setSelectedSquare, () =>
-          stopSolving(timer)
-        );
-      }, 1000);
+        solveSudoku(blocks, setBlocks, setSelectedSquare, () => {
+          stopSolving(timer);
+          setSelectedSquare({ block: null, row: null, col: null });
+        });
+      }, 500);
 
       return () => {
         clearTimeout(timer);
@@ -188,6 +191,7 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
         setBlocks,
         selectedSquare,
         setSelectedSquare,
+        isSolving,
       }}
     >
       {children}
