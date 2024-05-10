@@ -2,53 +2,53 @@ import { createContext, useState, useEffect } from "react";
 import * as React from "react";
 import { solveSudoku } from "../functions/solveSudoku";
 
-// const initialBlockState: IBlocks = {
-//   block1: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-//   block2: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-//   block3: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-//   block4: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-//   block5: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-//   block6: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-//   block7: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-//   block8: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-//   block9: [
-//     [null, null, null],
-//     [null, null, null],
-//     [null, null, null],
-//   ],
-// };
+const emptyBlockState: IBlocks = {
+  block1: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block2: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block3: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block4: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block5: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block6: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block7: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block8: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+  block9: [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ],
+};
 
 const initialBlockState: IBlocks = {
   block1: [
@@ -128,6 +128,7 @@ export type DataContextType = {
   setBlocks: React.Dispatch<React.SetStateAction<IBlocks>>;
   setSelectedSquare: React.Dispatch<React.SetStateAction<selectedSquareType>>;
   triggerSolve: () => void;
+  resetBoard: () => void;
   isSolving: boolean;
 };
 
@@ -141,6 +142,7 @@ export const DataContext = createContext<DataContextType>({
   setBlocks: () => {},
   setSelectedSquare: () => {},
   triggerSolve: () => {},
+  resetBoard: () => {},
   isSolving: false,
 });
 
@@ -183,6 +185,11 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const resetBoard = () => {
+    setBlocks(emptyBlockState);
+    setSelectedSquare({ block: null, row: null, col: null });
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -192,6 +199,7 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
         selectedSquare,
         setSelectedSquare,
         isSolving,
+        resetBoard,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { DataContext, IBlocks, blockIdsType } from "./DataContextProvider";
 
 const validNumbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];

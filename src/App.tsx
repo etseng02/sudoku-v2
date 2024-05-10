@@ -1,7 +1,8 @@
 import { DataContextProvider } from "./components/DataContextProvider";
 import InputSquares from "./components/InputSquares";
+import MainButtonRow from "./components/MainButtonRow";
 import MainGrid from "./components/MainGrid";
-import SolveButton from "./components/SolveButton";
+// import SolveButton from "./components/SolveButton";
 
 const App = () => {
   return (
@@ -17,7 +18,7 @@ const App = () => {
             <InputSquares />
           </div>
           <div className="my-4 w-fit mx-auto">
-            <SolveButton />
+            <MainButtonRow />
           </div>
         </main>
       </DataContextProvider>

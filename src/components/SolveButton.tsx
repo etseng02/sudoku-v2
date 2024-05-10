@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { DataContext } from "./DataContextProvider";
 
-const SolveButton = () => {
+const SolveButton: React.FC = () => {
   const { triggerSolve, isSolving } = useContext(DataContext);
 
   return (
@@ -12,7 +12,7 @@ const SolveButton = () => {
       }`}
       onClick={() => triggerSolve()}
     >
-      {isSolving ? "Solving..." : "Solve"}
+      {isSolving ? "Stop" : "Solve"}
     </button>
   );
 };
