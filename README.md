@@ -1,30 +1,19 @@
-# React + TypeScript + Vite
+# Sudoku Solver
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![gif of sudoku solver placing each number down](src/screenshots/screenshot1.gif)
 
-Currently, two official plugins are available:
+## Featues
+1. Tries to solve simple sudokus by checking the row column and within its own square block.
+2. Shows user the next number and solves sudoku sequentially.
+3. Adds a toast to let user know that running the solving algorithm was completed or errored out.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting started
+1. Use node 20.7+
+2. Clone repo
+3. Run `npm install`
+4. Run `npm run dev`
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Limitations
+1. Cannot run on lower node versions.
+2. Cannot solve much harder sudokus.

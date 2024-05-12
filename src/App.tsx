@@ -32,12 +32,19 @@ const App = () => {
 
       <footer className="mt-20 mb-10 px-4 text-center text-gray-50">
         <small className="mb-2 block text-xs">
-          &copy; 2024 Eddie Tseng. All rights reserved.
+          &copy; 2024 Eddie Tseng. All rights reserved.{" "}
+          <a
+            className="underline"
+            href="https://github.com/etseng02/sudoku-v3"
+            target="_blank"
+          >
+            Github
+          </a>
         </small>
         <p className="text-xs">
           <span className="font-semibold">About this website:</span> built with
           React & Vite, TypeScript, Tailwind CSS, Vitest, Testing Library,
-          Vercel hosting.
+          Vercel hosting.{" "}
         </p>
       </footer>
     </div>
