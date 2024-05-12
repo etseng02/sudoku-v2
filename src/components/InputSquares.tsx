@@ -66,9 +66,10 @@ const InputSquares: React.FC = () => {
 
   return (
     <section className="flex flex-row">
-      {inputs.map((input) => {
+      {inputs.map((input, key) => {
         return (
           <button
+            key={key}
             className={`border-solid border-black text-center border-2 align-middle sm:leading-10 w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] ${"bg-slate-100 text-gray-700"} ${
               isSolving ? "cursor-not-allowed" : "cursor-pointer"
             }`}

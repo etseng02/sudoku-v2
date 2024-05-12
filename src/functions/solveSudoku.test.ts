@@ -3,12 +3,14 @@ import {
   eliminateNumbersWithinColumn,
   eliminateNumbersWithinBlock,
   eliminateNumbersWithinRow,
+  solveSudoku,
 } from "./solveSudoku";
-import { expect, test, describe } from "vitest";
+import { expect, test, describe, vi, afterEach } from "vitest";
 import {
   sudokuCheckColumnMockData,
   sudokuCheckRowMockData,
 } from "./sudokuMockData";
+import { emptyBlockState, demoSet1 } from "../data/sudokuSets";
 
 describe("eliminateNumbersWithinBlock", () => {
   test("should return 8 eliminated numbers if there are 8 valid numbers", () => {
@@ -151,5 +153,58 @@ describe("eliminateNumberWithinRow", () => {
     );
 
     expect(result).toEqual(expect.arrayContaining([1, 2, 3, 4, 7, 8, 9]));
+  });
+});
+
+describe("solveSudoku", () => {
+  const mockedSetBlocks = vi.fn();
+  const mockedSetSelectedSquare = vi.fn();
+  const mockedCallback = vi.fn();
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test("should call set blocks to return the new state of the board", () => {
+    solveSudoku(
+      emptyBlockState,
+      mockedSetBlocks,
+      mockedSetSelectedSquare,
+      mockedCallback
+    );
+
+    expect(mockedSetBlocks).toHaveBeenCalledTimes(1);
+  });
+
+  test("should call mockedCallback if there are no changes to any squares", () => {
+    solveSudoku(
+      emptyBlockState,
+      mockedSetBlocks,
+      mockedSetSelectedSquare,
+      mockedCallback
+    );
+
+    expect(mockedSetSelectedSquare).toHaveBeenCalledTimes(0);
+    expect(mockedCallback).toHaveBeenCalledTimes(1);
+  });
+
+  test("should return the board with the next number if possible", () => {
+    solveSudoku(
+      demoSet1,
+      mockedSetBlocks,
+      mockedSetSelectedSquare,
+      mockedCallback
+    );
+
+    const expectedBlock1 = [
+      [8, null, 1],
+      [2, 5, 6],
+      [null, 4, null],
+    ];
+
+    expect(mockedSetBlocks).toHaveBeenCalledWith({
+      ...demoSet1,
+      block1: expectedBlock1,
+    });
   });
 });

@@ -13,7 +13,6 @@ const DataSets: React.FC = () => {
   type buttonType = {
     label: string;
     onClick: () => void;
-    isActive?: boolean;
   };
 
   const buttons = [...formattedDemoSets] as buttonType[];
@@ -26,9 +25,9 @@ const DataSets: React.FC = () => {
           <button
             onClick={() => (isSolving ? () => {} : button.onClick())}
             key={index}
-            className={`border border-white p-2 rounded-2xl shadow-2xl h-fit flex flex-row ${
-              button?.isActive ? "text-gray-700 bg-slate-50" : "text-slate-50"
-            } ${isSolving && "cursor-not-allowed"}`}
+            className={`border border-white p-2 rounded-2xl shadow-2xl h-fit flex flex-row text-slate-50 first-letter:${
+              isSolving && "cursor-not-allowed"
+            }`}
           >
             {button.label}
           </button>

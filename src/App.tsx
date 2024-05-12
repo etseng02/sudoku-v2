@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import { DataContextProvider } from "./components/DataContextProvider";
 import DataSets from "./components/DataSets";
 import InputSquares from "./components/InputSquares";
@@ -26,6 +27,7 @@ const App = () => {
           </div>
           <Options />
         </main>
+        <Toaster />
       </DataContextProvider>
 
       <footer className="mt-20 mb-10 px-4 text-center text-gray-50">
