@@ -29,7 +29,7 @@ const DataSets: React.FC = () => {
           <button
             onClick={() => (isSolving ? () => {} : button.onClick())}
             key={index}
-            className={`border border-white p-2 rounded-2xl shadow-2xl h-fit flex flex-row text-slate-50 first-letter:${
+            className={`border border-white p-2 rounded-2xl shadow-2xl h-fit flex flex-row text-slate-50 ${
               isSolving && "cursor-not-allowed"
             }`}
           >
