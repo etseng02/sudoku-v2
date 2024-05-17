@@ -7,6 +7,7 @@ import {
   checkValidSudoku,
 } from "../functions/checkState";
 import toast from "react-hot-toast";
+import { deepClone } from "../functions/utils";
 
 const getInitialBlockState = (numberOfDemoSets: number) => {
   const demoSetIndex = Math.floor(Math.random() * numberOfDemoSets);
@@ -52,10 +53,10 @@ export type DataContextType = {
 
 const demoSetIndex = getInitialBlockState(allDemoSets.length);
 
-const initialBlockState = allDemoSets[demoSetIndex];
+const initialBlockState = deepClone(allDemoSets[demoSetIndex]);
 
 export const DataContext = createContext<DataContextType>({
-  blocks: initialBlockState,
+  blocks: { ...initialBlockState },
   selectedSquare: {
     block: null,
     row: null,
@@ -125,7 +126,7 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const resetBoard = () => {
-    setBlocks(emptyBlockState);
+    setBlocks(deepClone(emptyBlockState));
     setSelectedSquare({ block: null, row: null, col: null });
   };
 

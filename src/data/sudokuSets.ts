@@ -1,6 +1,6 @@
 import { IBlocks } from "../components/DataContextProvider";
 
-export const emptyBlockState: IBlocks = {
+export const emptyBlockState: Readonly<IBlocks> = {
   block1: [
     [null, null, null],
     [null, null, null],
@@ -48,7 +48,7 @@ export const emptyBlockState: IBlocks = {
   ],
 };
 
-export const demoSet1: IBlocks = {
+export const demoSet1: Readonly<IBlocks> = {
   block1: [
     [8, null, 1],
     [2, 5, null],
@@ -96,7 +96,7 @@ export const demoSet1: IBlocks = {
   ],
 };
 
-export const demoSet2: IBlocks = {
+export const demoSet2: Readonly<IBlocks> = {
   block1: [
     [null, 9, 1],
     [null, 2, null],

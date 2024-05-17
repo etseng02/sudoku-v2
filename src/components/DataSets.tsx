@@ -1,13 +1,17 @@
 import { useContext } from "react";
 import { allDemoSets } from "../data/sudokuSets";
 import { DataContext } from "./DataContextProvider";
+import { deepClone } from "../functions/utils";
 
 const DataSets: React.FC = () => {
-  const { isSolving, setBlocks } = useContext(DataContext);
+  const { isSolving, setBlocks, setSelectedSquare } = useContext(DataContext);
 
   const formattedDemoSets = allDemoSets.map((demoSet, index) => ({
     label: `Set ${index + 1}`,
-    onClick: () => setBlocks(demoSet),
+    onClick: () => {
+      setBlocks(deepClone(demoSet));
+      setSelectedSquare({ block: null, row: null, col: null });
+    },
   }));
 
   type buttonType = {
