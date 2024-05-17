@@ -6,3 +6,13 @@ export const checkCompletedSudoku = (blocks: IBlocks): boolean => {
     block.every((cell: number | null) => cell !== null)
   );
 };
+
+export const checkValidSudoku = (blocks: IBlocks): boolean => {
+  return Object.values(blocks).every((block) => {
+    const set = new Set<number>(
+      block.flat().filter((cell: number | null) => cell !== null)
+    );
+
+    return set.size === 9;
+  });
+};

@@ -2,7 +2,10 @@ import { createContext, useState, useEffect } from "react";
 import * as React from "react";
 import { solveSudoku } from "../functions/solveSudoku";
 import { emptyBlockState, allDemoSets } from "../data/sudokuSets";
-import { checkCompletedSudoku } from "../functions/checkState";
+import {
+  checkCompletedSudoku,
+  checkValidSudoku,
+} from "../functions/checkState";
 import toast from "react-hot-toast";
 
 const getInitialBlockState = (numberOfDemoSets: number) => {
@@ -91,12 +94,16 @@ export const DataContextProvider: React.FC<{ children: React.ReactNode }> = ({
           solveSudoku(blocks, setBlocks, setSelectedSquare, () => {
             stopSolving(timer);
             setSelectedSquare({ block: null, row: null, col: null });
-            const isCompletedSudoku = checkCompletedSudoku(blocks);
 
-            if (isCompletedSudoku) {
+            const isValidSudoku = checkValidSudoku(blocks);
+
+            if (isValidSudoku) {
               toast.success("Sudoku Solved!");
             } else {
-              toast.error("There was an error solving the Sudoku.");
+              const isCompletedSudoku = checkCompletedSudoku(blocks);
+              isCompletedSudoku
+                ? toast.error("There are duplicate numbers in the Sudoku.")
+                : toast.error("The sudoku could not be solved.");
             }
           });
         },
