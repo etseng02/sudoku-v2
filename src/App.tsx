@@ -35,7 +35,7 @@ const App = () => {
           &copy; 2024 Eddie Tseng. All rights reserved.{" "}
           <a
             className="underline"
-            href="https://github.com/etseng02/sudoku-v3"
+            href="https://github.com/etseng02/sudoku-v2"
             target="_blank"
           >
             Github
