@@ -162,7 +162,7 @@ describe("solveSudoku", () => {
   const mockedCallback = vi.fn();
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   test("should call set blocks to return the new state of the board", () => {
