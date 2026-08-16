@@ -56,7 +56,7 @@ describe("checkColumn", () => {
       sudokuCheckColumnMockData,
       "block4",
       1,
-      2
+      2,
     );
 
     expect(result).toEqual(expect.arrayContaining([1, 2, 3, 4, 6, 7, 8, 9]));
@@ -76,7 +76,7 @@ describe("checkColumn", () => {
       },
       "block4",
       1,
-      2
+      2,
     );
 
     expect(result).toEqual(expect.arrayContaining([1, 2, 3, 6, 7, 8, 9]));
@@ -96,7 +96,7 @@ describe("checkColumn", () => {
       },
       "block4",
       1,
-      2
+      2,
     );
 
     expect(result).toEqual(expect.arrayContaining([1, 2, 3, 7, 8, 9]));
@@ -109,7 +109,7 @@ describe("eliminateNumberWithinRow", () => {
       sudokuCheckRowMockData,
       "block2",
       0,
-      1
+      1,
     );
 
     expect(result).toEqual(expect.arrayContaining([1, 2, 3, 4, 6, 7, 8, 9]));
@@ -129,7 +129,7 @@ describe("eliminateNumberWithinRow", () => {
       },
       "block2",
       0,
-      1
+      1,
     );
 
     expect(result).toEqual(expect.arrayContaining([1, 2, 3, 4, 7, 8, 9]));
@@ -149,7 +149,7 @@ describe("eliminateNumberWithinRow", () => {
       },
       "block2",
       0,
-      1
+      1,
     );
 
     expect(result).toEqual(expect.arrayContaining([1, 2, 3, 4, 7, 8, 9]));
@@ -162,7 +162,7 @@ describe("solveSudoku", () => {
   const mockedCallback = vi.fn();
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.resetAllMocks();
   });
 
   test("should call set blocks to return the new state of the board", () => {
@@ -170,7 +170,7 @@ describe("solveSudoku", () => {
       emptyBlockState,
       mockedSetBlocks,
       mockedSetSelectedSquare,
-      mockedCallback
+      mockedCallback,
     );
 
     expect(mockedSetBlocks).toHaveBeenCalledTimes(1);
@@ -181,7 +181,7 @@ describe("solveSudoku", () => {
       emptyBlockState,
       mockedSetBlocks,
       mockedSetSelectedSquare,
-      mockedCallback
+      mockedCallback,
     );
 
     expect(mockedSetSelectedSquare).toHaveBeenCalledTimes(0);
@@ -193,7 +193,7 @@ describe("solveSudoku", () => {
       demoSet1,
       mockedSetBlocks,
       mockedSetSelectedSquare,
-      mockedCallback
+      mockedCallback,
     );
 
     const expectedBlock1 = [
